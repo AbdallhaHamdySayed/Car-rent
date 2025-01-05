@@ -6,13 +6,15 @@ import com.example.Car_Rent.entity.User;
 import com.example.Car_Rent.enums.UserRole;
 import com.example.Car_Rent.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
 
-    private final UserRepository userRepository;
+    @Autowired
+    UserRepository userRepository;
 
     @Override
     public UserDto createCustomer(SignupRequest signupRequest) {
@@ -25,5 +27,10 @@ public class AuthServiceImpl implements AuthService {
         UserDto userDto = new UserDto();
         userDto.setId(createdUser.getId());
         return userDto;
+    }
+
+    @Override
+    public boolean hasCustomerWithEmail(String email) {
+        return userRepository.findFirstByEmail(email).isPresent();
     }
 }
